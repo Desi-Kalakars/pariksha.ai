@@ -1,0 +1,5 @@
+google.generativeai
+langchain-google-genai
+langchain
+langchain_community
+fastapi
