@@ -1,9 +1,10 @@
 from fastapi import File, Form, UploadFile, APIRouter, HTTPException
 from typing import  Optional
+from models.questions_response import ResponseModel
 
 router = APIRouter()
 
-@router.post("/generate-questions")
+@router.post("/generate-questions",response_model=ResponseModel)
 async def generate_questions(
     file: Optional[UploadFile] = File(None),
     subject: str = Form(...),
@@ -14,28 +15,24 @@ async def generate_questions(
     q_type_fill_in_the_blanks: int = Form(...),
 ):
     # Validate that at least one question type is greater than zero
-    if not any([q_type_mcq_single, q_type_mcq_multiple, q_type_descriptive, q_type_fill_in_the_blanks]):
+    if (
+        q_type_mcq_single <= 0 and
+        q_type_mcq_multiple <= 0 and
+        q_type_descriptive <= 0 and
+        q_type_fill_in_the_blanks <= 0
+    ):
         raise HTTPException(status_code=400, detail="At least one question type must be greater than zero.")
 
-    if file:
-        # Handle file upload
-        # e.g., process the file, extract data, etc.
-        pass
-    else:
-        # Handle case when no file is uploaded
-        # e.g., process the content directly, etc.
-        pass
+    # Placeholder logic to generate questions
+    questions = {
+        "mcq_single": ["question1", "question2"] if q_type_mcq_single > 0 else [],
+        "mcq_multiple": ["question1", "question2"] if q_type_mcq_multiple > 0 else [],
+        "fill_in_the_blanks": ["question1", "question2"] if q_type_fill_in_the_blanks > 0 else [],
+        "descriptive": ["question1", "question2"] if q_type_descriptive > 0 else []
+    }
 
-    # Further processing based on subject, content, and question types
-    # ...
-
+    # Return the response
     return {
-        "message": "Questions generated successfully",
-        "file": file.filename if file else None,
-        "subject": subject,
-        "content": content,
-        "q_type_mcq_single": q_type_mcq_single,
-        "q_type_mcq_multiple": q_type_mcq_multiple,
-        "q_type_descriptive": q_type_descriptive,
-        "q_type_fill_in_the_blanks": q_type_fill_in_the_blanks
+        "status": "success",
+        "questions": questions
     }

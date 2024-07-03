@@ -157,3 +157,4 @@ Thumbs.db
 **/docker-compose.yml
 backend/app/__pycache__/*
 backend/app/routes/__pycache__/*
+backend/app/models/__pycache__/*
