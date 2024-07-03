@@ -11,7 +11,7 @@ yarn-error.log*
 
 # Python
 # Byte-compiled / optimized / DLL files
-backend/__pycache__/
+backend/*__pycache__*/
 backend/*.py[cod]
 backend/*.pyo
 backend/*.pyd
@@ -155,3 +155,5 @@ Thumbs.db
 # Docker
 **/Dockerfile
 **/docker-compose.yml
+backend/app/__pycache__/*
+backend/app/routes/__pycache__/*
