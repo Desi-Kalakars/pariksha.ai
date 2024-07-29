@@ -1,12 +1,15 @@
-from fastapi import File, Form, UploadFile, APIRouter, HTTPException
-from typing import  Optional
+from typing import Union
+
+from fastapi import APIRouter, Form, HTTPException, UploadFile
 from models.questions_response import ResponseModel
+from utils.file_readers import read_docx, read_pdf
 
 router = APIRouter()
 
-@router.post("/generate-questions",response_model=ResponseModel)
+
+@router.post("/generate-questions", response_model=ResponseModel)
 async def generate_questions(
-    file: Optional[UploadFile] = File(None),
+    file: Union[UploadFile, None] = None,
     subject: str = Form(...),
     content: str = Form(...),
     q_type_mcq_single: int = Form(...),
@@ -16,40 +19,41 @@ async def generate_questions(
 ):
     # Validate that at least one question type is greater than zero
     if (
-        q_type_mcq_single <= 0 and
-        q_type_mcq_multiple <= 0 and
-        q_type_descriptive <= 0 and
-        q_type_fill_in_the_blanks <= 0
+        q_type_mcq_single <= 0
+        and q_type_mcq_multiple <= 0
+        and q_type_descriptive <= 0
+        and q_type_fill_in_the_blanks <= 0
     ):
-        raise HTTPException(status_code=400, detail="At least one question type must be greater than zero.")
+        raise HTTPException(
+            status_code=400,
+            detail="At least one question type must be greater than zero.",
+        )
 
-    # Validate file type if a file is provided
+    document_data = None
+    # Determine file type and read content
     if file:
-        valid_extensions = {"pdf", "doc", "docx"}
-        filename = file.filename
-        file_extension = filename.split(".")[-1].lower()
+        if file.filename.endswith(".pdf"):
+            document_data = await read_pdf(file)
+        elif file.filename.endswith(".docx"):
+            document_data = await read_docx(file)
+        else:
+            # Handle unsupported file type error
+            raise HTTPException(
+                status_code=400,
+                error="Unsupported file type. Please upload a PDF, DOC, or DOCX file.",
+            )
 
-        if file_extension not in valid_extensions:
-            raise HTTPException(status_code=400, detail="Unsupported file type. Please upload a PDF, DOC, or DOCX file.")
-
-        # Handle file upload
-        # e.g., process the file, extract data, etc.
-    else:
-        # Handle case when no file is uploaded
-        # e.g., process the content directly, etc.
-        pass
-
+    print(document_data)
 
     # Placeholder logic to generate questions
     questions = {
         "mcq_single": ["question1", "question2"] if q_type_mcq_single > 0 else [],
         "mcq_multiple": ["question1", "question2"] if q_type_mcq_multiple > 0 else [],
-        "fill_in_the_blanks": ["question1", "question2"] if q_type_fill_in_the_blanks > 0 else [],
-        "descriptive": ["question1", "question2"] if q_type_descriptive > 0 else []
+        "fill_in_the_blanks": (
+            ["question1", "question2"] if q_type_fill_in_the_blanks > 0 else []
+        ),
+        "descriptive": ["question1", "question2"] if q_type_descriptive > 0 else [],
     }
 
     # Return the response
-    return {
-        "status": "success",
-        "questions": questions
-    }
+    return {"status": "success", "questions": questions}
