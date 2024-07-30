@@ -1,10 +1,10 @@
 from typing import Union
-
 from fastapi import APIRouter, Form, HTTPException, UploadFile
+from services.question_generation import QuestionGeneratingService
 from models.questions_response import ResponseModel
-from utils.file_readers import read_docx, read_pdf
 
 router = APIRouter()
+question_generating_service = QuestionGeneratingService()
 
 
 @router.post("/generate-questions", response_model=ResponseModel)
@@ -29,22 +29,24 @@ async def generate_questions(
             detail="At least one question type must be greater than zero.",
         )
 
-    document_data = None
     # Determine file type and read content
     if file:
-        if file.filename.endswith(".pdf"):
-            document_data = await read_pdf(file)
-        elif file.filename.endswith(".docx"):
-            document_data = await read_docx(file)
-        else:
+        if not file.filename.endswith((".pdf", ".docx")):
             # Handle unsupported file type error
             raise HTTPException(
                 status_code=400,
                 error="Unsupported file type. Please upload a PDF, DOC, or DOCX file.",
             )
-
-    print(document_data)
-
+    questions_response = await question_generating_service.generate_questions(
+        file,
+        subject,
+        content,
+        q_type_mcq_single,
+        q_type_mcq_multiple,
+        q_type_descriptive,
+        q_type_fill_in_the_blanks,
+    )
+    print(questions_response)
     # Placeholder logic to generate questions
     questions = {
         "mcq_single": ["question1", "question2"] if q_type_mcq_single > 0 else [],

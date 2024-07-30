@@ -159,3 +159,5 @@ backend/app/__pycache__/*
 backend/app/routes/__pycache__/*
 backend/app/models/__pycache__/*
 backend/app/utils/__pycache__/*
+
+.trunk/*

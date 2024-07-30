@@ -3,3 +3,6 @@ pydantic
 python-multipart
 PyPDF2
 python-docx
+python-dotenv
+langchain
+langchain-google-genai

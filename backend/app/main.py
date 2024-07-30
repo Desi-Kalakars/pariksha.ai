@@ -1,6 +1,10 @@
 from fastapi import FastAPI
 from routes.ping import router as ping_router
 from routes.generate_questions import router as generate_questions
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 
