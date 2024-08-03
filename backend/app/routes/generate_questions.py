@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 from fastapi import APIRouter, Form, HTTPException, UploadFile
 from services.question_generation import QuestionGeneratingService
 from models.questions_response import ResponseModel
@@ -10,8 +10,8 @@ question_generating_service = QuestionGeneratingService()
 @router.post("/generate-questions", response_model=ResponseModel)
 async def generate_questions(
     file: Union[UploadFile, None] = None,
-    subject: str = Form(...),
-    content: str = Form(...),
+    subject: Optional[str] = None,
+    content: Optional[str] = None,
     q_type_mcq_single: int = Form(...),
     q_type_mcq_multiple: int = Form(...),
     q_type_descriptive: int = Form(...),
