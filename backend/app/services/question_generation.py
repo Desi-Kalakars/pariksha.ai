@@ -22,7 +22,13 @@ class QuestionGeneratingService:
         q_type_fill_in_the_blanks: int,
     ):
         document_data = await self._read_file_content(file) if file else None
-        llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
+        llm = ChatGoogleGenerativeAI(
+            model="gemini-1.5-flash",
+            temperature=0,
+            max_tokens=None,
+            timeout=None,
+            max_retries=2,
+        )
 
         prompt = self._create_prompt(
             subject,
@@ -35,7 +41,10 @@ class QuestionGeneratingService:
             q_type_fill_in_the_blanks,
         )
         print("Prompt:", prompt)
-        ai_response = llm.invoke(prompt).content
+        ai_response = (
+            llm.invoke(prompt).content.replace("```json", "").replace("```", "")
+        )
+
         print("AI Response:", ai_response)
 
         return json.loads(ai_response)
@@ -97,7 +106,7 @@ class QuestionGeneratingService:
               ]
             }
 
-        Ensure that your response strictly adheres to this JSON structure and don't add ```json in the beginning."""
+        Ensure that your response strictly adheres to this JSON structure."""
 
     def _get_user_query(
         self,
