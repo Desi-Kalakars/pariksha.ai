@@ -1,22 +1,47 @@
 from typing import Union, Optional
-from fastapi import APIRouter, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Form, HTTPException, UploadFile, File
 from services.question_generation import QuestionGeneratingService
 from models.questions_response import ResponseModel
+from models.error_response import ErrorResponse
 
 router = APIRouter()
 question_generating_service = QuestionGeneratingService()
 
 
-@router.post("/generate-questions", response_model=ResponseModel)
+@router.post(
+    "/generate-questions",
+    response_model=ResponseModel,
+    responses={
+        400: {"model": ErrorResponse, "description": "Bad Request"},
+        404: {"model": ErrorResponse, "description": "Resource Not Found"},
+        500: {"model": ErrorResponse, "description": "Internal Server Error"},
+    },
+    summary="Generate questions based on input",
+    description="This endpoint generates questions based on the provided content or uploaded file.",
+)
 async def generate_questions(
-    file: Union[UploadFile, None] = None,
-    subject: Optional[str] = Form(None),
-    content: Optional[str] = Form(None),
-    difficulty: Optional[str] = Form(None),
-    q_type_mcq_single: Optional[int] = Form(None),
-    q_type_mcq_multiple: Optional[int] = Form(None),
-    q_type_descriptive: Optional[int] = Form(None),
-    q_type_fill_in_the_blanks: Optional[int] = Form(None),
+    file: Union[UploadFile, None] = File(
+        None, description="An optional file to upload (PDF or DOCX)"
+    ),
+    subject: Optional[str] = Form(None, description="The subject of the content"),
+    content: Optional[str] = Form(
+        None, description="The text content to generate questions from"
+    ),
+    difficulty: Optional[str] = Form(
+        None, description="The difficulty level of the questions"
+    ),
+    q_type_mcq_single: Optional[int] = Form(
+        None, description="Number of single-answer MCQ questions"
+    ),
+    q_type_mcq_multiple: Optional[int] = Form(
+        None, description="Number of multiple-answer MCQ questions"
+    ),
+    q_type_descriptive: Optional[int] = Form(
+        None, description="Number of descriptive questions"
+    ),
+    q_type_fill_in_the_blanks: Optional[int] = Form(
+        None, description="Number of fill-in-the-blanks questions"
+    ),
 ):
     # Validate that either file or content is provided
     if file is None and not content:
