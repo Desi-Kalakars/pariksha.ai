@@ -10,23 +10,34 @@ question_generating_service = QuestionGeneratingService()
 @router.post("/generate-questions", response_model=ResponseModel)
 async def generate_questions(
     file: Union[UploadFile, None] = None,
-    subject: Optional[str] = None,
-    content: Optional[str] = None,
-    q_type_mcq_single: int = Form(...),
-    q_type_mcq_multiple: int = Form(...),
-    q_type_descriptive: int = Form(...),
-    q_type_fill_in_the_blanks: int = Form(...),
+    subject: Optional[str] = Form(None),
+    content: Optional[str] = Form(None),
+    difficulty: Optional[str] = Form(None),
+    q_type_mcq_single: Optional[int] = Form(None),
+    q_type_mcq_multiple: Optional[int] = Form(None),
+    q_type_descriptive: Optional[int] = Form(None),
+    q_type_fill_in_the_blanks: Optional[int] = Form(None),
 ):
-    # Validate that at least one question type is greater than zero
-    if (
-        q_type_mcq_single <= 0
-        and q_type_mcq_multiple <= 0
-        and q_type_descriptive <= 0
-        and q_type_fill_in_the_blanks <= 0
+    # Validate that either file or content is provided
+    if file is None and not content:
+        raise HTTPException(
+            status_code=400,
+            detail="Either a file must be uploaded or content must be provided.",
+        )
+
+    # Validate that at least one question type is provided and greater than zero
+    if not any(
+        q_type is not None and q_type > 0
+        for q_type in [
+            q_type_mcq_single,
+            q_type_mcq_multiple,
+            q_type_descriptive,
+            q_type_fill_in_the_blanks,
+        ]
     ):
         raise HTTPException(
             status_code=400,
-            detail="At least one question type must be greater than zero.",
+            detail="At least one question type must be provided and greater than zero.",
         )
 
     # Determine file type and read content
@@ -41,6 +52,7 @@ async def generate_questions(
         file,
         subject,
         content,
+        difficulty,
         q_type_mcq_single,
         q_type_mcq_multiple,
         q_type_descriptive,
