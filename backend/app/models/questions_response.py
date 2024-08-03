@@ -1,12 +1,19 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Union
 
-class Questions(BaseModel):
-    mcq_single: List[str]
-    mcq_multiple: List[str]
-    fill_in_the_blanks: List[str]
-    descriptive: List[str]
+
+class Choice(BaseModel):
+    text: str
+    is_correct: bool
+
+
+class Question(BaseModel):
+    question_text: str
+    question_type: str
+    choices: Union[List[Choice], None]
+    correct_answer: Union[str, None]
+
 
 class ResponseModel(BaseModel):
     status: str
-    questions: Questions
+    questions: List[Question]

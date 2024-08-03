@@ -46,16 +46,5 @@ async def generate_questions(
         q_type_descriptive,
         q_type_fill_in_the_blanks,
     )
-    print(questions_response)
-    # Placeholder logic to generate questions
-    questions = {
-        "mcq_single": ["question1", "question2"] if q_type_mcq_single > 0 else [],
-        "mcq_multiple": ["question1", "question2"] if q_type_mcq_multiple > 0 else [],
-        "fill_in_the_blanks": (
-            ["question1", "question2"] if q_type_fill_in_the_blanks > 0 else []
-        ),
-        "descriptive": ["question1", "question2"] if q_type_descriptive > 0 else [],
-    }
-
     # Return the response
-    return {"status": "success", "questions": questions}
+    return {"status": "success", "questions": questions_response["questions"]}
