@@ -71,17 +71,21 @@ async def generate_questions(
             # Handle unsupported file type error
             raise HTTPException(
                 status_code=400,
-                error="Unsupported file type. Please upload a PDF, DOC, or DOCX file.",
+                detail="Unsupported file type. Please upload a PDF, DOC, or DOCX file.",
             )
-    questions_response = await question_generating_service.generate_questions(
-        file,
-        subject,
-        content,
-        difficulty,
-        q_type_mcq_single,
-        q_type_mcq_multiple,
-        q_type_descriptive,
-        q_type_fill_in_the_blanks,
-    )
-    # Return the response
-    return {"status": "success", "questions": questions_response["questions"]}
+    try:
+        questions_response = await question_generating_service.generate_questions(
+            file,
+            subject,
+            content,
+            difficulty,
+            q_type_mcq_single,
+            q_type_mcq_multiple,
+            q_type_descriptive,
+            q_type_fill_in_the_blanks,
+        )
+        # Return the response
+        return {"status": "success", "questions": questions_response["questions"]}
+    except Exception as e:
+        # Handle any other errors
+        raise HTTPException(status_code=500, detail=str(e))
