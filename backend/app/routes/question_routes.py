@@ -1,8 +1,9 @@
-from typing import Union, Optional
-from fastapi import APIRouter, Form, HTTPException, UploadFile, File
-from services.question_generation import QuestionGeneratingService
-from models.questions_response import ResponseModel
-from models.error_response import ErrorResponse
+from typing import Optional, Union
+
+from app.models.error_response import ErrorResponse
+from app.models.questions_response import ResponseModel
+from app.services.question_service import QuestionGeneratingService
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 
 router = APIRouter()
 question_generating_service = QuestionGeneratingService()

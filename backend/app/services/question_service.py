@@ -1,8 +1,9 @@
-import os
 import json
-from fastapi import UploadFile
+import os
 from typing import Optional
-from utils.file_readers import read_docx, read_pdf
+
+from app.utils.file_readers import read_docx, read_pdf
+from fastapi import UploadFile
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 

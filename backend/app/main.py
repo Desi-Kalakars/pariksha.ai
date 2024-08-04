@@ -1,6 +1,6 @@
-from fastapi import FastAPI
-from routes.generate_questions import router as generate_questions
+from app.routes.question_routes import router as generate_questions
 from dotenv import load_dotenv
+from fastapi import FastAPI
 
 load_dotenv()
 
