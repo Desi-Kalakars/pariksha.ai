@@ -39,8 +39,3 @@ jobs:
     - name: Build coverage file
       run: |
         pytest backend/ --junitxml=pytest.xml --cov-report=term-missing --cov=app backend/tests/ | tee pytest-coverage.txt
-    - name: Pytest coverage comment
-      uses: MishaKav/pytest-coverage-comment@main
-      with:
-          pytest-coverage-path: ./pytest-coverage.txt
-          junitxml-path: ./pytest.xml
