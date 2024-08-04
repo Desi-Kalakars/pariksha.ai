@@ -8,10 +8,24 @@ Run these commands in your terminal to setup project in local.
 ```sh
 python -m venv venv
 source venv/bin/activate
-pip-sync
+make install
 ```
 
-Run this command to start the server
+Run this command to start the server in dev environment.
 ```sh
-fastapi run app/main.py
+make dev
+```
+
+Run this command to start the server.
+```sh
+make start
+```
+
+Run this command to start the service in docker environment
+```sh
+docker-compose up --build
+```
+To stop the service running in docker environment
+```sh
+docker-compose down
 ```

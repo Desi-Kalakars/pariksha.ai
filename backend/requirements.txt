@@ -1,5 +1,13 @@
-google.generativeai
-langchain-google-genai
-langchain
-langchain_community
 fastapi
+uvicorn
+pydantic
+python-multipart
+PyPDF2
+python-docx
+python-dotenv
+langchain
+langchain-google-genai
+pytest
+pytest-asyncio
+pytest-mock
+pytest-cov

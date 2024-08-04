@@ -11,7 +11,7 @@ yarn-error.log*
 
 # Python
 # Byte-compiled / optimized / DLL files
-backend/__pycache__/
+backend/*__pycache__*/
 backend/*.py[cod]
 backend/*.pyo
 backend/*.pyd
@@ -152,6 +152,13 @@ backend/.pyright
 .DS_Store
 Thumbs.db
 
-# Docker
-**/Dockerfile
-**/docker-compose.yml
+backend/app/__pycache__/*
+backend/app/routes/__pycache__/*
+backend/app/models/__pycache__/*
+backend/app/utils/__pycache__/*
+
+.trunk/*
+backend/app/services/__pycache__/
+backend/tests/__pycache__/*
+backend/tests/routes/__pycache__/*
+backend/tests/services/__pycache__/*
