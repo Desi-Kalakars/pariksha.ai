@@ -13,7 +13,11 @@ start:
 
 test:
 	@echo "Running tests..."
-	@source $(ENV_FILE) && pytest --cov=.
+	@source $(ENV_FILE) && pytest tests/
+
+coverage:
+	@echo "Running tests & generating coverage report..."
+	@source $(ENV_FILE) && pytest --cov=app --cov-report=term-missing --cov-report=html tests/
 
 lint:
 	@echo "Linting code..."

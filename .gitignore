@@ -162,3 +162,6 @@ backend/app/utils/__pycache__/*
 
 .trunk/*
 backend/app/services/__pycache__/
+backend/tests/__pycache__/*
+backend/tests/routes/__pycache__/*
+backend/tests/services/__pycache__/*
