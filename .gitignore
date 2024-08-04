@@ -152,9 +152,6 @@ backend/.pyright
 .DS_Store
 Thumbs.db
 
-# Docker
-**/Dockerfile
-**/docker-compose.yml
 backend/app/__pycache__/*
 backend/app/routes/__pycache__/*
 backend/app/models/__pycache__/*
