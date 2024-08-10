@@ -3,16 +3,13 @@ name: Deploy to Cloud Run
 env:
   SERVICE_NAME: pariksha-be
   PROJECT_ID: pariksha-431515
-  DOCKER_IMAGE_URL: asia-south1-docker.pkg.dev/pariksha-431515/pariksha-image/pariksha-image
+  DOCKER_IMAGE_URL: us-east1-docker.pkg.dev/pariksha-431515/pariksha-image/pariksha-image
 
 on:
   push:
     branches:
       - master
       - deploy-backend-code
-  pull_request:
-    branches:
-      - master
 
 jobs:
   dockerize-and-deploy:
@@ -33,7 +30,7 @@ jobs:
 
       - name: Configure Docker
         run: |
-          gcloud auth configure-docker asia-south1-docker.pkg.dev
+          gcloud auth configure-docker us-east1-docker.pkg.dev
 
       - name: Build and Push Docker Image
         run: |
@@ -46,5 +43,5 @@ jobs:
           gcloud run deploy $SERVICE_NAME \
             --image ${{ env.DOCKER_IMAGE_URL }}:latest \
             --platform managed \
-            --region asia-south1 \
+            --region us-east1 \
             --allow-unauthenticated
