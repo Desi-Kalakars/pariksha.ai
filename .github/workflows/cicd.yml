@@ -3,7 +3,7 @@ name: Deploy to Cloud Run
 env:
   SERVICE_NAME: pariksha-be
   PROJECT_ID: pariksha-431515
-  DOCKER_IMAGE_URL: asia-south1-docker.pkg.dev/pariksha-431515/pariksha-image
+  DOCKER_IMAGE_URL: asia-south1-docker.pkg.dev/pariksha-431515/pariksha-image/pariksha-image
 
 on:
   push:
@@ -13,7 +13,6 @@ on:
   pull_request:
     branches:
       - master
-      - deploy-backend-code
 
 jobs:
   dockerize-and-deploy:
