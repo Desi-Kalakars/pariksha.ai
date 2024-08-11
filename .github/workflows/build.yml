@@ -45,4 +45,4 @@ jobs:
           pytest-coverage-path: ./pytest-coverage.txt
           junitxml-path: ./pytest.xml
     - name: Build the backend docker image
-      run: docker build -t question-generation-api:$(date +%s) backend/
+      run: docker build -t pariksha-be:$(date +%s) backend/
